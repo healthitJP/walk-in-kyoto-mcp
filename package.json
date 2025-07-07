@@ -1,0 +1,63 @@
+{
+  "name": "walk-in-kyoto-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for Kyoto public transportation route search with bus and train timetables",
+  "main": "dist/src/index.js",
+  "bin": {
+    "walk-in-kyoto-mcp": "dist/src/index.js"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:u": "jest tests/unit",
+    "test:i": "jest tests/integration",
+    "build": "tsc",
+    "start": "node dist/src/index.js",
+    "dev": "ts-node src/index.ts",
+    "mcp": "npm run build && npm run start",
+    "convert-js-to-json": "node scripts/convert-js-to-json.js"
+  },
+  "files": [
+    "dist/src/",
+    "data/",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/healthitJP/walk-in-kyoto-mcp.git"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "kyoto",
+    "transportation",
+    "bus",
+    "train",
+    "route-search",
+    "japan"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "preferGlobal": false,
+  "bugs": {
+    "url": "https://github.com/healthitJP/walk-in-kyoto-mcp/issues"
+  },
+  "homepage": "https://github.com/healthitJP/walk-in-kyoto-mcp#readme",
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.0.10",
+    "jest": "^30.0.4",
+    "ts-jest": "^29.4.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.15.0",
+    "axios": "^1.10.0",
+    "cheerio": "^1.1.0",
+    "tiktoken": "^1.0.21"
+  }
+}
