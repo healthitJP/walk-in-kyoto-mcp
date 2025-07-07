@@ -114,42 +114,21 @@ export class RouteHtmlFetcher {
     datetimeType: 'departure' | 'arrival',
     language: 'ja' | 'en'
   ): Promise<string> {
-    console.error('🚀 [RouteHtmlFetcher] Starting coordinate-based route search...');
-    console.error(`📊 Parameters:`);
-    console.error(`   - From coordinates: ${fromLat}, ${fromLng}`);
-    console.error(`   - To coordinates: ${toLat}, ${toLng}`);
-    console.error(`   - DateTime: ${datetime}`);
-    console.error(`   - DateTime type: ${datetimeType}`);
-    console.error(`   - Language: ${language}`);
-    
     // Master data を初期化
-    console.error('🔧 Initializing master data...');
     await this.initMasterData(language);
-    console.error('✅ Master data initialized');
-    
     // 座標から近隣駅を計算（元サイトのget_near_stationsと同様の処理）
-    console.error('🔍 Searching for nearby stations...');
     let fromStations = '';
     let toStations = '';
     
     try {
       fromStations = this.searchNearStations([fromLng, fromLat], '', 'S');
-      console.error(`✅ From stations calculated: ${fromStations}`);
     } catch (error) {
-      console.error(`❌ Error calculating from stations: ${error instanceof Error ? error.message : error}`);
     }
     
     try {
       toStations = this.searchNearStations([toLng, toLat], '', 'S');
-      console.error(`✅ To stations calculated: ${toStations}`);
     } catch (error) {
-      console.error(`❌ Error calculating to stations: ${error instanceof Error ? error.message : error}`);
     }
-    
-    console.error(`🚉 Calculated nearby stations:`);
-    console.error(`   - From stations: ${fromStations}`);
-    console.error(`   - To stations: ${toStations}`);
-    
     const params: RouteSearchParams = {
       fn: '',  // 座標検索では名前は空
       tn: '',
@@ -167,9 +146,6 @@ export class RouteHtmlFetcher {
       fi: 'S', // 座標検索はSpot
       ti: 'S'
     };
-
-    console.error(`🔗 Formatted parameters:`, params);
-
     return this.fetchHtml(params);
   }
 
@@ -450,21 +426,11 @@ export class RouteHtmlFetcher {
     // 完全なURLを構築してログ出力（stderrに出力してMCPプロトコルを破壊しないように）
     const queryString = new URLSearchParams(formattedParams).toString();
     const fullUrl = `${config.url}?${queryString}`;
-    console.error(`🌐 Complete GET Request URL: ${fullUrl}`);
-
     let lastError: Error | null = null;
 
     for (let attempt = 1; attempt <= this.retries; attempt++) {
       try {
-        console.error(`🔄 Attempt ${attempt}/${this.retries}: Fetching route HTML...`);
-        console.error(`📍 URL: ${config.url}`);
-        console.error(`📋 Params:`, this.formatParams(params));
-        
         const response = await axios(config);
-        
-        console.error(`✅ Response received: ${response.status} ${response.statusText}`);
-        console.error(`📄 Content length: ${response.data.length} characters`);
-        
         if (response.status === 200 && response.data) {
           return response.data;
         } else {
@@ -472,11 +438,8 @@ export class RouteHtmlFetcher {
         }
       } catch (error) {
         lastError = error instanceof Error ? error : new Error(String(error));
-        console.error(`❌ Attempt ${attempt} failed: ${lastError.message}`);
-        
         if (attempt < this.retries) {
           const delay = attempt * 1000; // 1秒, 2秒, 3秒...
-          console.error(`⏳ Waiting ${delay}ms before retry...`);
           await new Promise(resolve => setTimeout(resolve, delay));
         }
       }

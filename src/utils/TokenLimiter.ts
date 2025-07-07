@@ -1,12 +1,5 @@
 import { get_encoding } from 'tiktoken';
-
-/**
- * トークン制限を適用した結果
- */
-export interface TokenLimitResult<T> {
-  data: T;
-  truncated: boolean;
-}
+import { TokenLimitResult } from '../types';
 
 /**
  * JSONデータのトークン数を計算し、制限を超えた場合に切り詰める
@@ -118,20 +111,22 @@ export class TokenLimiter {
     
     // 各プロパティを追加しながらトークン数をチェック
     for (const [key, value] of Object.entries(obj)) {
-      const candidate = { ...result, [key]: value };
-      
-      // 配列の場合は特別処理
-      if (key === 'candidates' && Array.isArray(value)) {
+      // 配列の場合は特別処理（candidates、routes、その他の配列）
+      if (Array.isArray(value)) {
         const truncatedArray = this.truncateArray(value, maxTokens);
         const candidateWithArray = { ...result, [key]: truncatedArray };
         
         if (this.calculateTokens(candidateWithArray) <= maxTokens) {
           result[key] = truncatedArray;
+        } else {
+          // 配列が大きすぎる場合は空配列を設定
+          result[key] = [];
         }
-        break;
+        continue; // break ではなく continue を使用
       }
       
       // 通常のプロパティ
+      const candidate = { ...result, [key]: value };
       if (this.calculateTokens(candidate) <= maxTokens) {
         result[key] = value;
       } else {

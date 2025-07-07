@@ -4,8 +4,7 @@ import { TokenLimiter } from '../utils/TokenLimiter';
 import { RequestValidator } from '../utils/RequestValidator';
 import { 
   RouteSearchByGeoRequest, 
-  RouteSearchResponse, 
-  McpError 
+  RouteSearchResponse
 } from '../types';
 
 /**
@@ -54,7 +53,7 @@ export class RouteSearchByGeoService {
         );
 
       // HTML解析
-      const parseResult = this.parser.parseHtml(html);
+      const parseResult = this.parser.parseHtml(html, request.language);
 
       // 位置が見つからない場合のエラーハンドリング
       if (parseResult.routes.length === 0) {
@@ -118,7 +117,12 @@ export class RouteSearchByGeoService {
   private isKnownError(error: Error): boolean {
     return error.message.includes('400') || 
            error.message.includes('404') || 
-           error.message.includes('503');
+           error.message.includes('503') ||
+           error.message.includes('Location not found') ||
+           error.message.includes('Invalid') ||
+           error.message.includes('Missing required parameter') ||
+           (error as any).code === 404 ||
+           (error as any).code === 503;
   }
 
   /**
@@ -133,43 +137,40 @@ export class RouteSearchByGeoService {
   /**
    * 位置が見つからないエラーを作成
    */
-  private createLocationNotFoundError(fromLatLng: string, toLatLng: string): McpError {
-    return {
-      code: 404,
-      message: 'Location not found',
-      details: {
-        from_latlng: fromLatLng,
-        to_latlng: toLatLng,
-        cause: 'location_not_found'
-      }
+  private createLocationNotFoundError(fromLatLng: string, toLatLng: string): Error {
+    const error = new Error('Location not found');
+    (error as any).code = 404;
+    (error as any).details = {
+      from_latlng: fromLatLng,
+      to_latlng: toLatLng,
+      cause: 'location_not_found'
     };
+    return error;
   }
 
   /**
    * タイムアウトエラーを作成
    */
-  private createTimeoutError(): McpError {
-    return {
-      code: 503,
-      message: 'Service temporarily unavailable',
-      details: {
-        cause: 'upstream_timeout'
-      }
+  private createTimeoutError(): Error {
+    const error = new Error('Service temporarily unavailable');
+    (error as any).code = 503;
+    (error as any).details = {
+      cause: 'upstream_timeout'
     };
+    return error;
   }
 
   /**
    * 内部エラーを作成
    */
-  private createInternalError(message: string): McpError {
-    return {
-      code: 500,
-      message: 'Internal server error',
-      details: {
-        cause: 'internal_error',
-        original_message: message
-      }
+  private createInternalError(message: string): Error {
+    const error = new Error('Internal server error');
+    (error as any).code = 500;
+    (error as any).details = {
+      cause: 'internal_error',
+      original_message: message
     };
+    return error;
   }
 
   /**

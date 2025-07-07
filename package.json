@@ -1,20 +1,17 @@
 {
   "name": "walk-in-kyoto-mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "MCP server for Kyoto public transportation route search with bus and train timetables",
   "main": "dist/src/index.js",
   "bin": {
     "walk-in-kyoto-mcp": "dist/src/index.js"
   },
   "scripts": {
-    "test": "jest",
-    "test:u": "jest tests/unit",
-    "test:i": "jest tests/integration",
+    "test": "jest --silent",
+    "test:u": "jest tests/unit --silent",
+    "test:i": "jest tests/integration --silent",
     "build": "tsc",
-    "start": "node dist/src/index.js",
-    "dev": "ts-node src/index.ts",
-    "mcp": "npm run build && npm run start",
-    "convert-js-to-json": "node scripts/convert-js-to-json.js"
+    "dev": "npm run build && npx mcp-inspector node dist/src/index.js"
   },
   "files": [
     "dist/src/",

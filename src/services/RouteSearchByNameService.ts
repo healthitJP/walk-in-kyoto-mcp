@@ -4,8 +4,7 @@ import { TokenLimiter } from '../utils/TokenLimiter';
 import { RequestValidator } from '../utils/RequestValidator';
 import { 
   RouteSearchByNameRequest, 
-  RouteSearchResponse, 
-  McpError 
+  RouteSearchResponse
 } from '../types';
 
 /**
@@ -49,7 +48,7 @@ export class RouteSearchByNameService {
         );
 
       // HTML解析
-      const parseResult = this.parser.parseHtml(html);
+      const parseResult = this.parser.parseHtml(html, request.language);
 
       // 駅が見つからない場合のエラーハンドリング
       if (parseResult.routes.length === 0) {
@@ -115,7 +114,12 @@ export class RouteSearchByNameService {
   private isKnownError(error: Error): boolean {
     return error.message.includes('400') || 
            error.message.includes('404') || 
-           error.message.includes('503');
+           error.message.includes('503') ||
+           error.message.includes('Stop not found') ||
+           error.message.includes('Invalid') ||
+           error.message.includes('Missing required parameter') ||
+           (error as any).code === 404 ||
+           (error as any).code === 503;
   }
 
   /**

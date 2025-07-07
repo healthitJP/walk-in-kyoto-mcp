@@ -2,6 +2,12 @@
 export type Language = 'ja' | 'en';
 export type DateTimeType = 'departure' | 'arrival' | 'first' | 'last';
 
+// 汎用ユーティリティ型
+export interface TokenLimitResult<T> {
+  data: T;
+  truncated: boolean;
+}
+
 // Tool 1: search_stop_by_substring
 export interface StopSearchRequest {
   language: Language;
@@ -52,6 +58,10 @@ export interface RouteLeg {
   line?: string;
   from?: string;
   to?: string;
+  from_lat?: number;
+  from_lng?: number;
+  to_lat?: number;
+  to_lng?: number;
   duration_min: number;
   stops?: number;
   fare_jpy?: number;
@@ -179,9 +189,3 @@ export interface Master {
   coefficient: Coefficient;
 }
 
-// Error Types
-export interface McpError {
-  code: number;
-  message: string;
-  details?: any;
-} 

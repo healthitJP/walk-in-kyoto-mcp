@@ -9,35 +9,6 @@ import {
   McpError,
 } from '@modelcontextprotocol/sdk/types.js';
 
-// ==================== DEBUG LOG FUNCTIONALITY - START (DELETE THIS SECTION WHEN NOT NEEDED) ====================
-import fs from 'fs';
-import path from 'path';
-
-// ログファイル設定
-const LOG_FILE = path.join(process.cwd(), 'mcp-debug.log');
-
-// ログ関数を定義
-function logToFile(message: string): void {
-  const timestamp = new Date().toISOString();
-  const logEntry = `[${timestamp}] ${message}\n`;
-  fs.appendFileSync(LOG_FILE, logEntry, 'utf8');
-}
-
-// console.errorをオーバーライドしてファイルにも出力
-const originalConsoleError = console.error;
-console.error = (...args: any[]) => {
-  const message = args.map(arg => 
-    typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
-  ).join(' ');
-  
-  // 元のconsole.errorも呼び出し
-  originalConsoleError(...args);
-  
-  // ファイルにも出力
-  logToFile(message);
-};
-// ==================== DEBUG LOG FUNCTIONALITY - END (DELETE UNTIL HERE) ====================
-
 // サービスのインポート
 import { StopSearchService } from './services/StopSearchService';
 import { RouteSearchByNameService } from './services/RouteSearchByNameService';
@@ -70,7 +41,7 @@ class WalkInKyotoMcpServer {
     this.server = new Server(
       {
         name: 'walk-in-kyoto-mcp',
-        version: '1.0.0',
+        version: '0.2.0',
       },
       {
         capabilities: {
@@ -271,17 +242,7 @@ class WalkInKyotoMcpServer {
    */
   private async handleRouteSearchByGeo(args: RouteSearchByGeoRequest) {
     // 緯度経度検索のパラメータをログ出力
-    console.error('🔍 [Route Search by Geo] Starting geo-coordinate search...');
-    console.error(`📍 From: ${args.from_latlng}`);
-    console.error(`📍 To: ${args.to_latlng}`);
-    console.error(`⏰ DateTime: ${args.datetime} (${args.datetime_type})`);
-    console.error(`🌐 Language: ${args.language}`);
-    console.error(`📝 Max tokens: ${args.max_tokens}`);
-    
     const result: RouteSearchResponse = await this.routeSearchByGeoService.searchRoute(args);
-    
-    console.error(`✅ [Route Search by Geo] Search completed, found ${result.routes.length} routes`);
-    
     return {
       content: [
         {
@@ -298,12 +259,6 @@ class WalkInKyotoMcpServer {
   async run(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    
-    console.error('Walk-in-Kyoto MCP Server running on stdio');
-    // ==================== DEBUG LOG INFO - START (DELETE WHEN LOG FUNCTIONALITY IS REMOVED) ====================
-    console.error(`📝 Debug logs will be written to: ${LOG_FILE}`);
-    console.error('🔍 To monitor logs: tail -f mcp-debug.log');
-    // ==================== DEBUG LOG INFO - END (DELETE UNTIL HERE) ====================
   }
 
   /**
@@ -321,13 +276,11 @@ async function main(): Promise<void> {
   
   // シグナルハンドリング
   process.on('SIGINT', async () => {
-    console.error('Received SIGINT, shutting down gracefully...');
     await server.dispose();
     process.exit(0);
   });
 
   process.on('SIGTERM', async () => {
-    console.error('Received SIGTERM, shutting down gracefully...');
     await server.dispose();
     process.exit(0);
   });
@@ -335,7 +288,6 @@ async function main(): Promise<void> {
   try {
     await server.run();
   } catch (error) {
-    console.error('Fatal error:', error);
     await server.dispose();
     process.exit(1);
   }
@@ -343,6 +295,5 @@ async function main(): Promise<void> {
 
 // メイン実行
 main().catch((error) => {
-  console.error('Unhandled error:', error);
   process.exit(1);
 }); 
