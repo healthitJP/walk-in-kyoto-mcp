@@ -20,5 +20,7 @@ module.exports = {
     'html'
   ],
   testTimeout: 10000,
-  setupFilesAfterEnv: ['<rootDir>/tests/setup.ts']
+  setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
+  // console.log を非表示にする設定
+  silent: true
 };

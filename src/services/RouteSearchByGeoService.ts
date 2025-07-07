@@ -48,7 +48,7 @@ export class RouteSearchByGeoService {
           toLat,
           toLng,
           request.datetime,
-          request.datetime_type === 'first' || request.datetime_type === 'last' ? 'departure' : request.datetime_type,
+          request.datetime_type,
           request.language
         );
 

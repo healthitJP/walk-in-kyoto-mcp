@@ -43,12 +43,17 @@ export class RouteSearchByNameService {
           request.from_station,
           request.to_station,
           request.datetime,
-          request.datetime_type === 'first' || request.datetime_type === 'last' ? 'departure' : request.datetime_type,
+          request.datetime_type,
           request.language
         );
 
       // HTML解析
       const parseResult = this.parser.parseHtml(html, request.language);
+      
+
+      if (parseResult.routes.length > 0) {
+
+      }
 
       // 駅が見つからない場合のエラーハンドリング
       if (parseResult.routes.length === 0) {
@@ -58,7 +63,15 @@ export class RouteSearchByNameService {
       }
 
       // トークン制限適用
+
+      const originalTokens = this.tokenLimiter.calculateTokens(parseResult);
+
+      
       const limitResult = this.tokenLimiter.applyLimit(parseResult, request.max_tokens);
+      
+
+      const finalTokens = this.tokenLimiter.calculateTokens(limitResult.data);
+
 
       return {
         routes: limitResult.data.routes,

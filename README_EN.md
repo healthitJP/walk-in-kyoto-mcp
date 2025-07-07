@@ -24,7 +24,8 @@ This MCP server is based on public information from [Arukumachi Kyoto](https://w
 - 🚌 **Kyoto Transportation Guide** - Optimal route search across city buses, private railways, and subways
 - 🗺️ **Simple Search** - Just mention a station name or use GPS to find routes
 - 🌐 **Japanese Language Support** - Search and guidance in Japanese and English
-- 🕐 **Time-based Planning** - Specify times like "I want to leave tomorrow at 10 AM"
+- 🕐 **Detailed Time Information** - Specify times like "I want to leave tomorrow at 10 AM" with detailed departure/arrival times for each segment
+- 🌙 **Midnight Crossing Support** - Accurate handling of routes that cross midnight (overnight services)
 - ⚡ **AI Integration** - Use with AI assistants like ChatGPT or Claude
 
 ### 💡 When Is It Useful?
@@ -72,6 +73,8 @@ Add the following to your Claude Desktop configuration file (`claude_desktop_con
 - Take Kyoto City Bus Route 101, about 45 minutes
 - Fare: 230 yen, no transfers required
 - Specific bus stop names and route numbers provided
+- Detailed departure/arrival times for each segment (e.g., 10:00 depart → 10:45 arrive)
+- Midnight crossing handling for overnight services
 
 ### 🔄 Other MCP Clients
 
@@ -114,7 +117,7 @@ Search for stations and bus stops by partial string matching.
 
 #### 2. `search_route_by_name` - Route Search by Station Name
 
-Search for routes by specifying station/bus stop names.
+Search for routes by specifying station/bus stop names. Provides detailed departure/arrival times for each segment and handles midnight crossing.
 
 **Parameters**:
 ```typescript
@@ -130,7 +133,7 @@ Search for routes by specifying station/bus stop names.
 
 #### 3. `search_route_by_geo` - Route Search by GPS Coordinates
 
-Search for routes by specifying latitude and longitude.
+Search for routes by specifying latitude and longitude. Provides detailed departure/arrival times for each segment and handles midnight crossing.
 
 **Parameters**:
 ```typescript
@@ -163,6 +166,8 @@ Search for routes by specifying latitude and longitude.
           "line": "City Bus Route 100",    // Route name
           "from": "Kyoto Station",         // Departure point
           "to": "Kiyomizu-michi",          // Destination point
+          "depart_time": "2025-07-07T09:00", // Segment departure time
+          "arrive_time": "2025-07-07T09:15", // Segment arrival time
           "duration_min": 15,              // Duration
           "stops": 8,                      // Number of stops
           "fare_jpy": 230                  // Segment fare

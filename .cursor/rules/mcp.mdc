@@ -5140,7 +5140,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
           this.tools.map(({ name }) => name)
         );
       } catch (e) {
-        console.log("Failed to connect to MCP server: ", e);
+
         throw e;
       }
     }
@@ -5216,8 +5216,8 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
       });
 
       try {
-        console.log("\nMCP Client Started!");
-        console.log("Type your queries or 'quit' to exit.");
+
+
 
         while (true) {
           const message = await rl.question("\nQuery: ");
@@ -5225,7 +5225,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
             break;
           }
           const response = await this.processQuery(message);
-          console.log("\n" + response);
+
         }
       } finally {
         rl.close();
@@ -5244,7 +5244,7 @@ In this tutorial, you'll learn how to build an LLM-powered chatbot client that c
     ```typescript
     async function main() {
       if (process.argv.length < 3) {
-        console.log("Usage: node index.ts <path_to_server_script>");
+
         return;
       }
       const mcpClient = new MCPClient();
@@ -6633,7 +6633,6 @@ This tutorial will primarily focus on tools.
         }
         return (await response.json()) as T;
       } catch (error) {
-        console.error("Error making NWS request:", error);
         return null;
       }
     }
@@ -6838,11 +6837,9 @@ This tutorial will primarily focus on tools.
     async function main() {
       const transport = new StdioServerTransport();
       await server.connect(transport);
-      console.error("Weather MCP Server running on stdio");
     }
 
     main().catch((error) => {
-      console.error("Fatal error in main():", error);
       process.exit(1);
     });
     ```

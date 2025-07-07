@@ -62,6 +62,8 @@ export interface RouteLeg {
   from_lng?: number;
   to_lat?: number;
   to_lng?: number;
+  depart_time?: string; // ISO-8601 format departure time for this leg
+  arrive_time?: string; // ISO-8601 format arrival time for this leg
   duration_min: number;
   stops?: number;
   fare_jpy?: number;
@@ -89,7 +91,7 @@ export interface RouteSearchParams {
   fl: string;        // from location (緯度経度)
   tl: string;        // to location (緯度経度)
   de: string;        // delay estimation (遅延予測: y/n)
-  tt: string;        // time type (d=departure, a=arrival)
+  tt: string;        // time type (d=departure, a=arrival, f=first, l=last)
   md: string;        // mode (t=transit)
   pn: string;        // pass name (経由地)
   lang: Language;    // ja or en

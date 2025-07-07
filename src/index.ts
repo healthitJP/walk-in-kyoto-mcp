@@ -28,8 +28,8 @@ import {
  * 
  * Tools:
  * 1. search_stop_by_substring - 駅・バス停の部分一致検索
- * 2. search_route_by_name - 駅名指定でのルート検索
- * 3. search_route_by_geo - 緯度経度指定でのルート検索
+ * 2. search_route_by_name - 駅名指定でのルート検索（詳細発着時刻、日付跨ぎ対応）
+ * 3. search_route_by_geo - 緯度経度指定でのルート検索（詳細発着時刻、日付跨ぎ対応）
  */
 class WalkInKyotoMcpServer {
   private server: Server;
@@ -89,7 +89,7 @@ class WalkInKyotoMcpServer {
           },
           {
             name: 'search_route_by_name',
-            description: '駅名・バス停名指定でルート検索を行います。',
+            description: '駅名・バス停名指定でルート検索を行います。各区間の詳細な発着時刻、日付跨ぎ対応。',
             inputSchema: {
               type: 'object',
               properties: {
@@ -127,7 +127,7 @@ class WalkInKyotoMcpServer {
           },
           {
             name: 'search_route_by_geo',
-            description: '緯度経度指定でルート検索を行います。',
+            description: '緯度経度指定でルート検索を行います。各区間の詳細な発着時刻、日付跨ぎ対応。',
             inputSchema: {
               type: 'object',
               properties: {

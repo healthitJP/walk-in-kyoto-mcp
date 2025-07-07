@@ -3,7 +3,7 @@ import { RouteHtmlFetcher } from '../../src/utils/RouteHtmlFetcher';
 import { RouteHtmlParser } from '../../src/utils/RouteHtmlParser';
 import { TokenLimiter } from '../../src/utils/TokenLimiter';
 import { RequestValidator } from '../../src/utils/RequestValidator';
-import { RouteSearchByNameRequest, RouteSearchResponse } from '../../src/types';
+import { RouteSearchByNameRequest } from '../../src/types';
 
 // モックの設定
 jest.mock('../../src/utils/RouteHtmlFetcher');
@@ -112,6 +112,7 @@ describe('RouteSearchByNameService', () => {
     } as any;
 
     mockTokenLimiter = {
+      calculateTokens: jest.fn(),
       applyLimit: jest.fn(),
       destroy: jest.fn(),
     } as any;
@@ -129,6 +130,7 @@ describe('RouteSearchByNameService', () => {
     // デフォルトのモック戻り値設定
     mockFetcher.fetchByName.mockResolvedValue(mockHtmlResponse);
     mockParser.parseHtml.mockReturnValue(mockParseResult);
+    mockTokenLimiter.calculateTokens.mockReturnValue(1000); // デフォルトトークン数
     mockTokenLimiter.applyLimit.mockReturnValue(mockLimitResult);
 
     service = new RouteSearchByNameService(

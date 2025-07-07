@@ -72,7 +72,7 @@ export class RouteHtmlFetcher {
     fromStation: string,
     toStation: string,
     datetime: string,
-    datetimeType: 'departure' | 'arrival',
+    datetimeType: 'departure' | 'arrival' | 'first' | 'last',
     language: 'ja' | 'en'
   ): Promise<string> {
     await this.initMasterData(language);
@@ -81,17 +81,20 @@ export class RouteHtmlFetcher {
     const { fromStations, fromCoords, fromType } = await this.generateNearbyStations(fromStation, language);
     const { fromStations: toStations, fromCoords: toCoords, fromType: toType } = await this.generateNearbyStations(toStation, language);
 
+    // 始発・終電の場合の時刻処理
+    const { finalDateTime, timeType } = this.processFirstLastTime(datetime, datetimeType);
+
     const params: RouteSearchParams = {
       fn: fromStation,    
       tn: toStation,      
-      dt: this.formatDate(datetime),    
-      tm: this.formatTime(datetime),    
+      dt: this.formatDate(finalDateTime),    
+      tm: this.formatTime(finalDateTime),    
       fs: fromStations,   // 近隣駅リスト（カンマ区切り）
       ts: toStations,     // 近隣駅リスト（カンマ区切り）
       fl: fromCoords,     // 緯度経度
       tl: toCoords,       // 緯度経度
       de: 'n',            // delay estimation
-      tt: datetimeType === 'departure' ? 'd' : 'a',  
+      tt: timeType,       // 始発: 'f'、終電: 'l'、それ以外: 'd' または 'a'
       md: 't',            // mode (transit)
       pn: '',             // pass name (経由地)
       lang: language,
@@ -111,7 +114,7 @@ export class RouteHtmlFetcher {
     toLat: number,
     toLng: number,
     datetime: string,
-    datetimeType: 'departure' | 'arrival',
+    datetimeType: 'departure' | 'arrival' | 'first' | 'last',
     language: 'ja' | 'en'
   ): Promise<string> {
     // Master data を初期化
@@ -129,17 +132,21 @@ export class RouteHtmlFetcher {
       toStations = this.searchNearStations([toLng, toLat], '', 'S');
     } catch (error) {
     }
+
+    // 始発・終電の場合の時刻処理
+    const { finalDateTime, timeType } = this.processFirstLastTime(datetime, datetimeType);
+
     const params: RouteSearchParams = {
       fn: '',  // 座標検索では名前は空
       tn: '',
-      dt: this.formatDate(datetime),
-      tm: this.formatTime(datetime),
+      dt: this.formatDate(finalDateTime),
+      tm: this.formatTime(finalDateTime),
       fs: fromStations,  // 座標から計算した近隣駅リスト
       ts: toStations,    // 座標から計算した近隣駅リスト
       fl: `${fromLat},${fromLng}`,
       tl: `${toLat},${toLng}`,
       de: 'n',
-      tt: datetimeType === 'departure' ? 'd' : 'a',
+      tt: timeType,      // 始発: 'f'、終電: 'l'、それ以外: 'd' または 'a'
       md: 't',
       pn: '',
       lang: language,
@@ -323,30 +330,19 @@ export class RouteHtmlFetcher {
     // 全駅を検索して距離を計算
     for (const stationName in this.master.station) {
       const sinfo = this.master.station[stationName];
+      let len: number;
+      let isExactMatch = false;
       
-      // 同名駅の場合はスキップして0距離とする
+      // 同名駅の場合は0距離とする（但し、continueしない）
       const station = this.master.station[stationName];
       if (station && station.selectname === name && station.ekidiv === type) {
-        // 同名駅を探してランキングに追加
-        for (let j = 0; j < ranking.length; j++) {
-          if (ranking[j].name === '' || ranking[j].name === stationName) {
-            ranking[j] = {
-              len: 0,
-              name: stationName,
-              lat: sinfo.lat,
-              lng: sinfo.lng,
-              ekidiv: sinfo.ekidiv,
-              extra: 0
-            };
-            break;
-          }
-        }
-        continue;
+        len = 0;
+        isExactMatch = true;
+      } else {
+        // 距離計算（元サイトのロジック）
+        len = Math.pow(lonLat[1] - sinfo.lat, 2) + 
+              Math.pow(lonLat[0] - sinfo.lng, 2) * Math.pow(this.LAT_LNG_RATIO, 2);
       }
-
-      // 距離計算（元サイトのロジック）
-      const len = Math.pow(lonLat[1] - sinfo.lat, 2) + 
-                  Math.pow(lonLat[0] - sinfo.lng, 2) * Math.pow(this.LAT_LNG_RATIO, 2);
 
       // ランキングに挿入
       for (let j = 0; j < ranking.length; j++) {
@@ -361,7 +357,7 @@ export class RouteHtmlFetcher {
             lat: sinfo.lat,
             lng: sinfo.lng,
             ekidiv: sinfo.ekidiv,
-            extra: 0
+            extra: isExactMatch ? 0 : 1
           };
           break;
         }
@@ -375,7 +371,7 @@ export class RouteHtmlFetcher {
           lat: sinfo.lat,
           lng: sinfo.lng,
           ekidiv: 'R',
-          extra: 1
+          extra: isExactMatch ? 0 : 1
         };
       }
     }
@@ -389,7 +385,7 @@ export class RouteHtmlFetcher {
     // 結果文字列を生成（簡易版：実際はOSM Matrix APIで歩行時間を計算）
     let result = '';
     for (const station of ranking) {
-      if (station.name && station.extra === 0) {
+      if (station.name) {  // extra条件を削除して全ての駅を含める
         // 簡易的に距離ベースで歩行時間を推定（1km = 約12分）
         const walkingTime = station.len === 0 ? 0 : Math.ceil(Math.sqrt(station.len) * 111.32 / 5.0); // 時速5km想定
         const clampedTime = Math.min(walkingTime, 15); // 15分以内に制限
@@ -453,7 +449,7 @@ export class RouteHtmlFetcher {
    */
   private formatParams(params: RouteSearchParams): Record<string, string> {
     // URLエンコーディングは axios が自動で行うため、ここでは値をそのまま渡す
-    return {
+    const baseParams = {
       fn: params.fn,
       tn: params.tn,
       dt: params.dt,
@@ -470,6 +466,8 @@ export class RouteHtmlFetcher {
       fi: params.fi,
       ti: params.ti
     };
+
+    return baseParams;
   }
 
   private formatDate(datetime: string): string {
@@ -485,5 +483,41 @@ export class RouteHtmlFetcher {
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
+  }
+
+  /**
+   * 始発・終電の場合の時刻とパラメータを処理
+   */
+  private processFirstLastTime(datetime: string, datetimeType: 'departure' | 'arrival' | 'first' | 'last'): { finalDateTime: string; timeType: string } {
+    if (!this.master) {
+      // マスターデータが読み込まれていない場合のフォールバック
+      if (datetimeType === 'first') {
+        return { finalDateTime: datetime, timeType: 'f' };
+      } else if (datetimeType === 'last') {
+        return { finalDateTime: datetime, timeType: 'l' };
+      }
+      return { finalDateTime: datetime, timeType: datetimeType === 'departure' ? 'd' : 'a' };
+    }
+
+    const date = new Date(datetime);
+    
+    if (datetimeType === 'first') {
+      // 始発の場合：マスターデータから始発時刻を取得、なければデフォルト5:00
+      const firstTime = this.master.coefficient.SEARCH_FIRST_DEPARTURE_TIME || '05:00';
+      const [hours, minutes] = firstTime.split(':').map(Number);
+      date.setHours(hours, minutes, 0, 0);
+      const finalDateTime = date.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM形式
+      return { finalDateTime, timeType: 'f' };
+    } else if (datetimeType === 'last') {
+      // 終電の場合：マスターデータから終電時刻を取得、なければデフォルト23:30
+      const lastTime = this.master.coefficient.SESRCH_LAST_ARRIVAL_TIME || '23:30';
+      const [hours, minutes] = lastTime.split(':').map(Number);
+      date.setHours(hours, minutes, 0, 0);
+      const finalDateTime = date.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM形式
+      return { finalDateTime, timeType: 'l' }; // 終電の場合は tt=l を使用
+    } else {
+      // 通常の出発・到着時刻
+      return { finalDateTime: datetime, timeType: datetimeType === 'departure' ? 'd' : 'a' };
+    }
   }
 } 
