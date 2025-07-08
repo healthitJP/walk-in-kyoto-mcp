@@ -1,5 +1,5 @@
 import { get_encoding } from 'tiktoken';
-import { TokenLimitResult } from '../types';
+import { TokenLimitResult } from '../types/index.js';
 
 /**
  * JSONデータのトークン数を計算し、制限を超えた場合に切り詰める

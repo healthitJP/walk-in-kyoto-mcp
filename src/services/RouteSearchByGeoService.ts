@@ -1,11 +1,11 @@
-import { RouteHtmlFetcher } from '../utils/RouteHtmlFetcher';
-import { RouteHtmlParser } from '../utils/RouteHtmlParser';
-import { TokenLimiter } from '../utils/TokenLimiter';
-import { RequestValidator } from '../utils/RequestValidator';
+import { RouteHtmlFetcher } from '../utils/RouteHtmlFetcher.js';
+import { RouteHtmlParser } from '../utils/RouteHtmlParser.js';
+import { TokenLimiter } from '../utils/TokenLimiter.js';
+import { RequestValidator } from '../utils/RequestValidator.js';
 import { 
   RouteSearchByGeoRequest, 
   RouteSearchResponse
-} from '../types';
+} from '../types/index.js';
 
 /**
  * Tool 3: search_route_by_geo の実装

@@ -1,6 +1,6 @@
 import * as cheerio from 'cheerio';
-import { Route, RouteLeg, RouteSearchResponse } from '../types';
-import { StationCoordinateResolver } from './StationCoordinateResolver';
+import { Route, RouteLeg, RouteSearchResponse } from '../types/index.js';
+import { StationCoordinateResolver } from './StationCoordinateResolver.js';
 
 /**
  * HTMLからルート情報を解析してJSONに変換するクラス

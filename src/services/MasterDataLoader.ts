@@ -1,5 +1,5 @@
-import { Language, StopRecord, LandmarkRecord, Master, LandmarkData } from '../types';
-import { loadMaster, loadLandmarkData } from '../data';
+import { Language, StopRecord, LandmarkRecord, Master, LandmarkData } from '../types/index.js';
+import { loadMaster, loadLandmarkData } from '../data/index.js';
 
 /**
  * マスターデータとランドマークデータを読み込み、

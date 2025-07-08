@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { RouteSearchParams, Master, LandmarkData } from '../types';
-import { loadMaster, loadLandmarkData } from '../data';
+import { RouteSearchParams, Master, LandmarkData } from '../types/index.js';
+import { loadMaster, loadLandmarkData } from '../data/index.js';
 
 /**
  * HTML取得のオプション

@@ -1,6 +1,6 @@
 {
   "name": "walk-in-kyoto-mcp",
-  "version": "0.2.0",
+  "version": "0.3.3",
   "description": "MCP server for Kyoto public transportation route search with bus and train timetables",
   "main": "dist/src/index.js",
   "bin": {
@@ -10,12 +10,13 @@
     "test": "jest --silent",
     "test:u": "jest tests/unit --silent",
     "test:i": "jest tests/integration --silent",
-    "build": "tsc",
-    "dev": "npm run build && npx mcp-inspector node dist/src/index.js"
+    "build": "tsc && npm run copy-data",
+    "dev": "npm run build && npx mcp-inspector node dist/src/index.js",
+    "copy-data": "cpx \"data/**/*\" dist/data"
   },
   "files": [
     "dist/src/",
-    "data/",
+    "dist/data/",
     "README.md",
     "LICENSE"
   ],
@@ -33,9 +34,15 @@
     "route-search",
     "japan"
   ],
-  "author": "",
+  "author": "Ushida Yosei",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/src/index.js",
+      "require": "./dist/src/index.cjs"
+    }
+  },
   "engines": {
     "node": ">=16.0.0"
   },
@@ -47,6 +54,7 @@
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.10",
+    "cpx": "^1.5.0",
     "jest": "^30.0.4",
     "ts-jest": "^29.4.0",
     "typescript": "^5.8.3"

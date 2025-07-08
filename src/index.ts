@@ -10,9 +10,9 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 
 // サービスのインポート
-import { StopSearchService } from './services/StopSearchService';
-import { RouteSearchByNameService } from './services/RouteSearchByNameService';
-import { RouteSearchByGeoService } from './services/RouteSearchByGeoService';
+import { StopSearchService } from './services/StopSearchService.js';
+import { RouteSearchByNameService } from './services/RouteSearchByNameService.js';
+import { RouteSearchByGeoService } from './services/RouteSearchByGeoService.js';
 
 // 型のインポート
 import {
@@ -21,7 +21,7 @@ import {
   RouteSearchByGeoRequest,
   StopSearchResponse,
   RouteSearchResponse,
-} from './types';
+} from './types/index.js';
 
 /**
  * Walk-in-Kyoto MCP Server
@@ -41,7 +41,7 @@ class WalkInKyotoMcpServer {
     this.server = new Server(
       {
         name: 'walk-in-kyoto-mcp',
-        version: '0.2.0',
+        version: '0.3.3',
       },
       {
         capabilities: {

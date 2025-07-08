@@ -1,5 +1,5 @@
-import { Master } from '../types';
-import { loadMaster } from '../data';
+import { Master } from '../types/index.js';
+import { loadMaster } from '../data/index.js';
 
 /**
  * 駅名から緯度経度を解決するクラス

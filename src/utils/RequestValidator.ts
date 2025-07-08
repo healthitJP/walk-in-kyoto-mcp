@@ -1,4 +1,4 @@
-import { Language, DateTimeType, StopSearchRequest, RouteSearchByNameRequest, RouteSearchByGeoRequest } from '../types';
+import { Language, DateTimeType, StopSearchRequest, RouteSearchByNameRequest, RouteSearchByGeoRequest } from '../types/index.js';
 
 /**
  * MCP仕様に沿ったリクエストパラメータの検証を行う

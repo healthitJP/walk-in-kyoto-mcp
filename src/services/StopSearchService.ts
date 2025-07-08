@@ -1,7 +1,7 @@
-import { StopSearchRequest, StopSearchResponse, StopCandidate, StopRecord, LandmarkRecord, Language } from '../types';
-import { MasterDataLoader } from './MasterDataLoader';
-import { TokenLimiter } from '../utils/TokenLimiter';
-import { RequestValidator } from '../utils/RequestValidator';
+import { StopSearchRequest, StopSearchResponse, StopCandidate, StopRecord, LandmarkRecord, Language } from '../types/index.js';
+import { MasterDataLoader } from './MasterDataLoader.js';
+import { TokenLimiter } from '../utils/TokenLimiter.js';
+import { RequestValidator } from '../utils/RequestValidator.js';
 
 /**
  * 検索結果の関連度情報
