@@ -41,7 +41,7 @@ class WalkInKyotoMcpServer {
     this.server = new Server(
       {
         name: 'walk-in-kyoto-mcp',
-        version: '0.3.3',
+        version: '0.3.4',
       },
       {
         capabilities: {

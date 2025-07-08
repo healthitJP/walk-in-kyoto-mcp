@@ -1,53 +1,53 @@
 # Walk-in-Kyoto MCP Server
 
-**[English](README_EN.md)** | **日本語**
+**English** | **[日本語](README_JP.md)**
 
 [![npm version](https://badge.fury.io/js/walk-in-kyoto-mcp.svg)](https://www.npmjs.com/package/walk-in-kyoto-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Walk-in-Kyoto MCP** は、京都の公共交通機関（バス・電車）のルート検索を提供するModel Context Protocol (MCP) サーバーです。AI アシスタントが京都の交通情報を活用して、最適な移動ルートを提案できるようになります。
+**Walk-in-Kyoto MCP** is a Model Context Protocol (MCP) server that provides public transportation route search functionality for Kyoto, Japan (buses and trains). It enables AI assistants to utilize Kyoto transportation information to suggest optimal travel routes.
 
-## 📊 データソース
+## 📊 Data Source
 
-このMCPサーバーは、[歩くまち京都](https://www.arukumachikyoto.jp/)（KYOTO Transit Planner）の公開情報をもとにしています。
+This MCP server is based on public information from [Arukumachi Kyoto](https://www.arukumachikyoto.jp/) (KYOTO Transit Planner).
 
-- **運営**: 「歩くまち・京都」バス・鉄道乗換情報発信システム・コンソーシアム
-- **開発**: ジョルダン株式会社
+- **Operated by**: "Arukumachi Kyoto" Bus & Railway Transit Information System Consortium
+- **Developed by**: Jorudan Co.,Ltd.
 - **URL**: https://www.arukumachikyoto.jp/
 
 ---
 
-## 👀 このプロジェクトについて（一般の方向け）
+## 👀 About This Project (For General Users)
 
-### 🚀 何ができるのか
+### 🚀 What It Can Do
 
-- 🚌 **京都の交通案内** - 市バス、私鉄、地下鉄を横断した最適ルート検索
-- 🗺️ **簡単な検索** - 駅名を言うだけ、GPSを使うだけで経路がわかる
-- 🌐 **日本語対応** - 日本語・英語で検索・案内
-- 🕐 **詳細時刻対応** - 「明日の10時に出発したい」など時刻指定可能、各区間の発着時刻も表示
-- 🌙 **日付跨ぎ対応** - 深夜便などで日付が変わる場合も正確に処理
-- ⚡ **AI連携** - ChatGPTやClaude等のAIアシスタントと組み合わせて使用
+- 🚌 **Kyoto Transportation Guide** - Optimal route search across city buses, private railways, and subways
+- 🗺️ **Simple Search** - Just mention a station name or use GPS to find routes
+- 🌐 **Japanese Language Support** - Search and guidance in Japanese and English
+- 🕐 **Detailed Time Information** - Specify times like "I want to leave tomorrow at 10 AM" with detailed departure/arrival times for each segment
+- 🌙 **Midnight Crossing Support** - Accurate handling of routes that cross midnight (overnight services)
+- ⚡ **AI Integration** - Use with AI assistants like ChatGPT or Claude
 
-### 💡 どんな時に便利？
+### 💡 When Is It Useful?
 
-- 「京都駅から金閣寺に行きたい」
-- 「清水寺から嵐山まで一番安いルートは？」
-- 「現在地から最寄りの観光地へのアクセス方法は？」
+- "I want to go from Kyoto Station to Kinkaku-ji Temple"
+- "What's the cheapest route from Kiyomizu-dera to Arashiyama?"
+- "How do I get from my current location to the nearest tourist spot?"
 
 ---
 
-## 🤖 AIアシスタントで使いたい方向け
+## 🤖 For AI Assistant Users
 
-### 📦 すぐに始める
+### 📦 Quick Start
 
 ```bash
-# 簡単実行（推奨）
+# Simple execution (recommended)
 npx walk-in-kyoto-mcp
 ```
 
-### 🔧 Claude Desktop での設定
+### 🔧 Claude Desktop Setup
 
-お使いのClaude Desktopの設定ファイル（`claude_desktop_config.json`）に以下を追加：
+Add the following to your Claude Desktop configuration file (`claude_desktop_config.json`):
 
 ```json
 {
@@ -60,23 +60,23 @@ npx walk-in-kyoto-mcp
 }
 ```
 
-### 💬 実際の使用例
+### 💬 Real Usage Example
 
-**あなた**: 「京都駅から金閣寺まで、明日の午前10時出発で行きたいです」
+**You**: "I want to go from Kyoto Station to Kinkaku-ji Temple, departing tomorrow at 10 AM"
 
-**Claude（MCPツール使用後）**:
-1. 「金閣寺道」というバス停を検索
-2. 最適ルートを検索
-3. 結果を分析して回答
+**Claude (after using MCP tools)**:
+1. Search for bus stops named "Kinkaku-ji"
+2. Search for optimal routes
+3. Analyze results and provide clear guidance
 
-**結果**: 
-- 市バス101系統で約45分
-- 運賃230円、乗り換えなし
-- 具体的な停留所名とバス系統を提示
-- 各区間の詳細な発着時刻（10:00発→10:45着など）
-- 深夜便の場合は日付跨ぎも考慮
+**Result**: 
+- Take Kyoto City Bus Route 101, about 45 minutes
+- Fare: 230 yen, no transfers required
+- Specific bus stop names and route numbers provided
+- Detailed departure/arrival times for each segment (e.g., 10:00 depart → 10:45 arrive)
+- Midnight crossing handling for overnight services
 
-### 🔄 その他のMCPクライアント
+### 🔄 Other MCP Clients
 
 ```bash
 npx walk-in-kyoto-mcp
@@ -84,29 +84,29 @@ npx walk-in-kyoto-mcp
 
 ---
 
-## 🛠️ 技術的な詳細を知りたい方向け
+## 🛠️ For Those Who Want Technical Details
 
-### 提供ツール
+### Available Tools
 
-#### 1. `search_stop_by_substring` - 駅・バス停検索
+#### 1. `search_stop_by_substring` - Station/Bus Stop Search
 
-部分文字列で駅・バス停を検索します。
+Search for stations and bus stops by partial string matching.
 
-**パラメータ**:
+**Parameters**:
 ```typescript
 {
-  language: "ja" | "en"        // 応答言語
-  max_tokens: number           // 最大トークン数
-  query: string               // 検索クエリ（部分一致）
+  language: "ja" | "en"        // Response language
+  max_tokens: number           // Maximum token count
+  query: string               // Search query (partial match)
 }
 ```
 
-**レスポンス例**:
+**Response Example**:
 ```json
 {
   "candidates": [
     {
-      "name": "京都駅",
+      "name": "Kyoto Station",
       "kind": "train_station", 
       "id": "station_kyoto"
     }
@@ -115,163 +115,171 @@ npx walk-in-kyoto-mcp
 }
 ```
 
-#### 2. `search_route_by_name` - 駅名指定ルート検索
+#### 2. `search_route_by_name` - Route Search by Station Name
 
-駅名・バス停名を指定してルート検索を行います。各区間の詳細な発着時刻情報や日付跨ぎにも対応します。
+Search for routes by specifying station/bus stop names. Provides detailed departure/arrival times for each segment and handles midnight crossing.
 
-**パラメータ**:
+**Parameters**:
 ```typescript
 {
-  language: "ja" | "en"                              // 応答言語
-  max_tokens: number                                 // 最大トークン数
-  from_station: string                               // 出発駅・バス停名
-  to_station: string                                 // 到着駅・バス停名
-  datetime_type: "departure" | "arrival" | "first" | "last"  // 時刻指定タイプ
-  datetime: string                                   // ISO-8601形式日時
+  language: "ja" | "en"                              // Response language
+  max_tokens: number                                 // Maximum token count
+  from_station: string                               // Departure station/bus stop
+  to_station: string                                 // Destination station/bus stop
+  datetime_type: "departure" | "arrival" | "first" | "last"  // Time specification type
+  datetime: string                                   // ISO-8601 format datetime
 }
 ```
 
-#### 3. `search_route_by_geo` - GPS座標指定ルート検索
+#### 3. `search_route_by_geo` - Route Search by GPS Coordinates
 
-緯度経度を指定してルート検索を行います。各区間の詳細な発着時刻情報や日付跨ぎにも対応します。
+Search for routes by specifying latitude and longitude. Provides detailed departure/arrival times for each segment and handles midnight crossing.
 
-**パラメータ**:
+**Parameters**:
 ```typescript
 {
-  language: "ja" | "en"                              // 応答言語
-  max_tokens: number                                 // 最大トークン数
-  from_latlng: string                               // 出発地座標 "緯度,経度"
-  to_latlng: string                                 // 到着地座標 "緯度,経度"
-  datetime_type: "departure" | "arrival" | "first" | "last"  // 時刻指定タイプ
-  datetime: string                                  // ISO-8601形式日時
+  language: "ja" | "en"                              // Response language
+  max_tokens: number                                 // Maximum token count
+  from_latlng: string                               // Departure coordinates "lat,lng"
+  to_latlng: string                                 // Destination coordinates "lat,lng"
+  datetime_type: "departure" | "arrival" | "first" | "last"  // Time specification type
+  datetime: string                                  // ISO-8601 format datetime
 }
 ```
 
-### 📋 レスポンス形式
+### 📋 Response Format
 
 ```json
 {
   "routes": [
     {
       "summary": {
-        "depart": "2025-07-07T09:00",      // 出発時刻
-        "arrive": "2025-07-07T09:32",      // 到着時刻  
-        "duration_min": 32,                // 所要時間（分）
-        "transfers": 1,                    // 乗り換え回数
-        "fare_jpy": 230                    // 運賃（円）
+        "depart": "2025-07-07T09:00",      // Departure time
+        "arrive": "2025-07-07T09:32",      // Arrival time  
+        "duration_min": 32,                // Duration (minutes)
+        "transfers": 1,                    // Number of transfers
+        "fare_jpy": 230                    // Fare (Japanese yen)
       },
-      "legs": [                            // 区間詳細
+      "legs": [                            // Route segments
         {
-          "mode": "bus",                   // 交通手段
-          "line": "市バス100系統",           // 路線名
-          "from": "京都駅前",               // 出発地
-          "to": "清水道",                   // 到着地
-          "depart_time": "2025-07-07T09:00", // 区間出発時刻
-          "arrive_time": "2025-07-07T09:15", // 区間到着時刻
-          "duration_min": 15,              // 所要時間
-          "stops": 8,                      // 停車駅数
-          "fare_jpy": 230                  // 区間運賃
+          "mode": "bus",                   // Transportation mode
+          "line": "City Bus Route 100",    // Route name
+          "from": "Kyoto Station",         // Departure point
+          "to": "Kiyomizu-michi",          // Destination point
+          "depart_time": "2025-07-07T09:00", // Segment departure time
+          "arrive_time": "2025-07-07T09:15", // Segment arrival time
+          "duration_min": 15,              // Duration
+          "stops": 8,                      // Number of stops
+          "fare_jpy": 230                  // Segment fare
         }
       ]
     }
   ],
-  "truncated": false                       // レスポンス切り詰めフラグ
+  "truncated": false                       // Response truncation flag
 }
 ```
 
-### 🚨 エラーハンドリング
+### 🚨 Error Handling
 
-MCPプロトコルに従ったエラー形式：
+Error format following MCP protocol:
 
 ```json
 {
   "code": 404,
   "message": "Station not found",
   "details": {
-    "from_station": "存在しない駅", 
-    "to_station": "京都駅",
+    "from_station": "NonexistentStation", 
+    "to_station": "Kyoto Station",
     "cause": "stop_not_found"
   }
 }
 ```
 
-**主なエラーコード**:
-- `404`: 駅・停留所が見つからない
-- `503`: 外部APIサービス一時停止
-- `500`: 内部サーバーエラー
+**Main Error Codes**:
+- `404`: Station/stop not found
+- `503`: External API service temporarily unavailable
+- `500`: Internal server error
 
-### 📊 対応交通機関
+### 📊 Supported Transportation
 
-#### 鉄道路線
-- **京都市営地下鉄**: 全路線（烏丸線、東西線）
-- **近鉄**: 京都線、奈良線（大和西大寺～近鉄奈良）
-- **京阪**: 京阪本線、京津線、宇治線
-- **阪急**: 京都線、嵐山線
-- **嵐電（京福電鉄）**: 全路線（嵐山線、北野線）
-- **叡電**: 全路線（叡山本線、鞍馬線）
-- **嵯峨野観光鉄道**: 全路線（トロッコ）
+#### Railway Lines
+- **Kyoto Municipal Subway**: All lines (Karasuma Line, Tozai Line)
+- **Kintetsu**: Kyoto Line, Nara Line (Yamato-Saidaiji to Kintetsu Nara)
+- **Keihan**: Keihan Main Line, Keishin Line, Uji Line
+- **Hankyu**: Kyoto Line, Arashiyama Line
+- **Randen (Keifuku Electric Railroad)**: All lines (Arashiyama Line, Kitano Line)
+- **Eizan Electric Railway**: All lines (Eizan Main Line, Kurama Line)
+- **Sagano Scenic Railway**: All lines (Trolley train)
 
-#### バス路線
-- **京都市バス**: 全系統
-- **京都バス**: 全系統  
-- **京阪バス**: 山科営業所管内
-- **京阪京都交通**: 京都市内（一部路線を除く）及び京都市と亀岡市を結ぶ路線
-- **西日本JRバス**: 高雄京北線
-- **阪急バス**: 大原野線、長岡京線（一部）
-- **ヤサカバス**: 全系統
-- **醍醐コミュニティバス**: 全系統
-- **京都らくなんエクスプレス**: 全系統
-- **京都よるバス**: ぎおんよるバス、かわらまちよるバス
+#### Bus Lines
+- **Kyoto City Bus**: All routes
+- **Kyoto Bus**: All routes  
+- **Keihan Bus**: Yamashina Office area
+- **Keihan Kyoto Transport**: Kyoto City (excluding some routes) and routes connecting Kyoto City and Kameoka City
+- **West Japan JR Bus**: Takao Keihoku Line
+- **Hankyu Bus**: Oharano Line, Nagaokakyo Line (partial)
+- **Yasaka Bus**: All routes
+- **Daigo Community Bus**: All routes
+- **Kyoto Rakunan Express**: All routes
+- **Kyoto Night Bus**: Gion Night Bus, Kawaramachi Night Bus
 
-**対象エリア**: 京都市内を通る鉄道・バス路線、観光スポット、宿泊施設、飲食店等
+**Coverage Area**: Railway and bus lines passing through Kyoto City, tourist spots, accommodations, restaurants, etc.
+
+### 📊 Data Source
+
+This MCP server is based on public information from [Arukumachi Kyoto](https://www.arukumachikyoto.jp/) (KYOTO Transit Planner).
+
+- **Operated by**: "Arukumachi Kyoto" Bus & Railway Transit Information System Consortium
+- **Developed by**: Jorudan Co.,Ltd.
+- **URL**: https://www.arukumachikyoto.jp/
 
 ---
 
-## 🔧 開発・貢献したい方向け
+## 🔧 For Developers and Contributors
 
-### ⚙️ 開発環境構築
+### ⚙️ Development Environment Setup
 
-#### 必要環境
+#### Requirements
 - Node.js ≥ 16.0.0
 - npm ≥ 7.0.0
 
-#### 開発用コマンド
+#### Development Commands
 ```bash
-# 開発サーバー起動（mcp-inspector付き）
+# Start development server (with mcp-inspector)
 npm run dev
 
-# ビルド
+# Build
 npm run build
 
-# テスト実行
+# Run tests
 npm test
 
-# 単体テスト
+# Unit tests
 npm run test:u
 
-# 統合テスト  
+# Integration tests  
 npm run test:i
 ```
 
-### MCPクライアントでのテスト
+### MCP Client Testing
 
 ```bash
-# サーバー起動
+# Start server
 npm run dev
 
-# 別ターミナルでMCPクライアント接続テスト
+# Test MCP client connection in another terminal
 ```
 
-### 🤝 貢献・フィードバック
+### 🤝 Contributing and Feedback
 
-バグ報告や機能提案は [GitHub Issues](https://github.com/healthitJP/walk-in-kyoto-mcp/issues) までお願いします。
+Please report bugs and feature requests to [GitHub Issues](https://github.com/healthitJP/walk-in-kyoto-mcp/issues).
 
-### 📄 ライセンス
+### 📄 License
 
-MIT License - 詳細は [LICENSE](LICENSE) ファイルを参照
+MIT License - See [LICENSE](LICENSE) file for details
 
 ---
 
-**作成者**: YoseiUshida  
-**バージョン**: 0.2.0  
-**MCP SDK**: @modelcontextprotocol/sdk@1.15.0
+**Author**: YoseiUshida  
+**Version**: 0.3.4  
+**MCP SDK**: @modelcontextprotocol/sdk@1.15.0 
