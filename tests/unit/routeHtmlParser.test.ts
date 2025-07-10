@@ -1,5 +1,5 @@
-import { RouteHtmlParser } from '../../src/utils/RouteHtmlParser';
-import { RouteLeg } from '../../src/types';
+import { RouteHtmlParser } from '../../src/utils/RouteHtmlParser.js';
+import { RouteLeg } from '../../src/types/index.js';
 import * as fs from 'fs';
 import * as path from 'path';
 

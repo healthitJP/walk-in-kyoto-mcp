@@ -1,8 +1,8 @@
-import { StationCoordinateResolver } from '../../src/utils/StationCoordinateResolver';
-import { loadMaster } from '../../src/data';
+import { StationCoordinateResolver } from '../../src/utils/StationCoordinateResolver.js';
+import { loadMaster } from '../../src/data/index.js';
 
 // モックの設定
-jest.mock('../../src/data');
+jest.mock('../../src/data/index.js');
 
 const mockedLoadMaster = loadMaster as jest.MockedFunction<typeof loadMaster>;
 

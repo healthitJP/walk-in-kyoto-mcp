@@ -1,4 +1,4 @@
-import { TokenLimiter } from '../../src/utils/TokenLimiter';
+import { TokenLimiter } from '../../src/utils/TokenLimiter.js';
 
 describe('TokenLimiter', () => {
   let limiter: TokenLimiter;

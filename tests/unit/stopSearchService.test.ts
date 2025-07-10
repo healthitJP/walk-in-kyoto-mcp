@@ -1,6 +1,6 @@
-import { StopSearchService } from '../../src/services/StopSearchService';
-import { StopSearchRequest, StopCandidate } from '../../src/types';
-import { TokenLimiter } from '../../src/utils/TokenLimiter';
+import { StopSearchService } from '../../src/services/StopSearchService.js';
+import { StopSearchRequest } from '../../src/types/index.js';
+import { TokenLimiter } from '../../src/utils/TokenLimiter.js';
 
 describe('StopSearchService', () => {
   let service: StopSearchService;

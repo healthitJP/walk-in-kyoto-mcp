@@ -63,15 +63,7 @@ export class RouteSearchByNameService {
       }
 
       // トークン制限適用
-
-      const originalTokens = this.tokenLimiter.calculateTokens(parseResult);
-
-      
       const limitResult = this.tokenLimiter.applyLimit(parseResult, request.max_tokens);
-      
-
-      const finalTokens = this.tokenLimiter.calculateTokens(limitResult.data);
-
 
       return {
         routes: limitResult.data.routes,

@@ -1,7 +1,7 @@
-import { StopSearchService } from '../../src/services/StopSearchService';
-import { MasterDataLoader } from '../../src/services/MasterDataLoader';
-import { TokenLimiter } from '../../src/utils/TokenLimiter';
-import { StopSearchRequest } from '../../src/types';
+import { StopSearchService } from '../../src/services/StopSearchService.js';
+import { MasterDataLoader } from '../../src/services/MasterDataLoader.js';
+import { TokenLimiter } from '../../src/utils/TokenLimiter.js';
+import { StopSearchRequest } from '../../src/types/index.js';
 
 describe('Stop Search Integration Tests', () => {
   let stopSearchService: StopSearchService;

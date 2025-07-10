@@ -1,15 +1,15 @@
-import { RouteSearchByGeoService } from '../../src/services/RouteSearchByGeoService';
-import { RouteHtmlFetcher } from '../../src/utils/RouteHtmlFetcher';
-import { RouteHtmlParser } from '../../src/utils/RouteHtmlParser';
-import { TokenLimiter } from '../../src/utils/TokenLimiter';
-import { RequestValidator } from '../../src/utils/RequestValidator';
-import { RouteSearchByGeoRequest, RouteSearchResponse } from '../../src/types';
+import { RouteSearchByGeoService } from '../../src/services/RouteSearchByGeoService.js';
+import { RouteHtmlFetcher } from '../../src/utils/RouteHtmlFetcher.js';
+import { RouteHtmlParser } from '../../src/utils/RouteHtmlParser.js';
+import { TokenLimiter } from '../../src/utils/TokenLimiter.js';
+import { RequestValidator } from '../../src/utils/RequestValidator.js';
+import { RouteSearchByGeoRequest } from '../../src/types/index.js';
 
 // モックの設定
-jest.mock('../../src/utils/RouteHtmlFetcher');
-jest.mock('../../src/utils/RouteHtmlParser');
-jest.mock('../../src/utils/TokenLimiter');
-jest.mock('../../src/utils/RequestValidator');
+jest.mock('../../src/utils/RouteHtmlFetcher.js');
+jest.mock('../../src/utils/RouteHtmlParser.js');
+jest.mock('../../src/utils/TokenLimiter.js');
+jest.mock('../../src/utils/RequestValidator.js');
 
 const mockedFetcher = RouteHtmlFetcher as jest.MockedClass<typeof RouteHtmlFetcher>;
 const mockedParser = RouteHtmlParser as jest.MockedClass<typeof RouteHtmlParser>;
@@ -195,7 +195,7 @@ describe('RouteSearchByGeoService', () => {
       );
     });
 
-    it('should handle first datetime_type as departure', async () => {
+    it('should handle first datetime_type', async () => {
       const firstRequest = { ...validRequest, datetime_type: 'first' as const };
       
       await service.searchRoute(firstRequest);
@@ -206,12 +206,12 @@ describe('RouteSearchByGeoService', () => {
         35.01070,
         135.75972,
         '2025-01-15T09:30:00',
-        'departure',
+        'first',
         'ja'
       );
     });
 
-    it('should handle last datetime_type as departure', async () => {
+    it('should handle last datetime_type', async () => {
       const lastRequest = { ...validRequest, datetime_type: 'last' as const };
       
       await service.searchRoute(lastRequest);
@@ -222,7 +222,7 @@ describe('RouteSearchByGeoService', () => {
         35.01070,
         135.75972,
         '2025-01-15T09:30:00',
-        'departure',
+        'last',
         'ja'
       );
     });

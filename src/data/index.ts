@@ -8,9 +8,21 @@ import { fileURLToPath } from 'url';
 import type { LandmarkData, Master } from '../types/index.js';
 
 // このモジュールファイルが存在するディレクトリ (dist/src/data)
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-// パッケージ内の data ルート (dist/data)
-const DATA_ROOT = path.resolve(__dirname, '../../data');
+// Jest環境では import.meta.url が使えないため環境変数で判定
+let currentDir: string;
+const isJestEnvironment = process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID !== undefined;
+
+if (isJestEnvironment) {
+  // Jest環境での fallback: 現在のworking directoryから相対パスで解決
+  currentDir = path.resolve(process.cwd(), 'src/data');
+} else {
+  // 通常の実行環境
+  // TypeScript コンパイラーを回避するため eval を使用
+  const importMetaUrl = eval('import.meta.url');
+  currentDir = path.dirname(fileURLToPath(importMetaUrl));
+}
+// パッケージ内の data ルート (dist/data または開発時は ./data)
+const DATA_ROOT = path.resolve(currentDir, '../../data');
 
 export type { LandmarkData, Master };
 

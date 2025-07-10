@@ -1,5 +1,5 @@
-import { RequestValidator } from '../../src/utils/RequestValidator';
-import { StopSearchRequest, RouteSearchByNameRequest } from '../../src/types';
+import { RequestValidator } from '../../src/utils/RequestValidator.js';
+import { StopSearchRequest, RouteSearchByNameRequest } from '../../src/types/index.js';
 
 describe('RequestValidator', () => {
   let validator: RequestValidator;

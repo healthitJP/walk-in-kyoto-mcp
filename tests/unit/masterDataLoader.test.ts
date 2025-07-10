@@ -1,5 +1,5 @@
-import { MasterDataLoader } from '../../src/services/MasterDataLoader';
-import { Language, StopRecord, LandmarkRecord } from '../../src/types';
+import { MasterDataLoader } from '../../src/services/MasterDataLoader.js';
+import { Language } from '../../src/types/index.js';
 
 describe('MasterDataLoader', () => {
   let loader: MasterDataLoader;

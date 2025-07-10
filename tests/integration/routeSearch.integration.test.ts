@@ -2,13 +2,11 @@ import {
   RouteSearchByNameRequest, 
   RouteSearchByGeoRequest, 
   RouteSearchResponse 
-} from '../../src/types';
-import { RouteSearchByNameService } from '../../src/services/RouteSearchByNameService';
-import { RouteHtmlParser } from '../../src/utils/RouteHtmlParser';
-import { RequestValidator } from '../../src/utils/RequestValidator';
-import { TokenLimiter } from '../../src/utils/TokenLimiter';
-import * as fs from 'fs';
-import * as path from 'path';
+} from '../../src/types/index.js';
+import { RouteSearchByNameService } from '../../src/services/RouteSearchByNameService.js';
+import { RouteHtmlParser } from '../../src/utils/RouteHtmlParser.js';
+import { RequestValidator } from '../../src/utils/RequestValidator.js';
+import { TokenLimiter } from '../../src/utils/TokenLimiter.js';
 
 // モックサービス（実装されるまでの暫定）
 class MockRouteSearchByNameService {

@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { RouteHtmlFetcher } from '../../src/utils/RouteHtmlFetcher';
-import { loadMaster, loadLandmarkData } from '../../src/data';
+import { RouteHtmlFetcher } from '../../src/utils/RouteHtmlFetcher.js';
+import { loadMaster, loadLandmarkData } from '../../src/data/index.js';
 
 // モックの設定
 jest.mock('axios');

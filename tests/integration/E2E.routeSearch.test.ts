@@ -1,9 +1,9 @@
-import { RouteSearchByNameService } from '../../src/services/RouteSearchByNameService';
-import { RouteHtmlFetcher } from '../../src/utils/RouteHtmlFetcher';
-import { RouteHtmlParser } from '../../src/utils/RouteHtmlParser';
-import { TokenLimiter } from '../../src/utils/TokenLimiter';
-import { RequestValidator } from '../../src/utils/RequestValidator';
-import { RouteSearchByNameRequest } from '../../src/types';
+import { RouteSearchByNameService } from '../../src/services/RouteSearchByNameService.js';
+import { RouteHtmlFetcher } from '../../src/utils/RouteHtmlFetcher.js';
+import { RouteHtmlParser } from '../../src/utils/RouteHtmlParser.js';
+import { TokenLimiter } from '../../src/utils/TokenLimiter.js';
+import { RequestValidator } from '../../src/utils/RequestValidator.js';
+import { RouteSearchByNameRequest } from '../../src/types/index.js';
 
 /**
  * E2E (End-to-End) Tests
