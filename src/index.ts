@@ -41,7 +41,7 @@ class WalkInKyotoMcpServer {
     this.server = new Server(
       {
         name: 'walk-in-kyoto-mcp',
-        version: '0.3.4',
+        version: '0.3.6',
       },
       {
         capabilities: {
@@ -59,29 +59,29 @@ class WalkInKyotoMcpServer {
   }
 
   private setupHandlers(): void {
-    // ツール一覧の提供
+    // Provide list of tools
     this.server.setRequestHandler(ListToolsRequestSchema, async () => {
       return {
         tools: [
           {
             name: 'search_stop_by_substring',
-            description: '駅・バス停候補を部分文字列で検索します。日本語・英語対応。',
+            description: 'Search for station and bus stop candidates by partial string. Supports Japanese and English.',
             inputSchema: {
               type: 'object',
               properties: {
                 language: {
                   type: 'string',
                   enum: ['ja', 'en'],
-                  description: '応答言語 (ja: 日本語, en: 英語)',
+                  description: 'Response language (ja: Japanese, en: English)',
                 },
                 max_tokens: {
                   type: 'integer',
                   minimum: 1,
-                  description: 'レスポンスの最大トークン数',
+                  description: 'Maximum number of tokens in response',
                 },
                 query: {
                   type: 'string',
-                  description: '部分一致検索クエリ',
+                  description: 'Partial match search query',
                 },
               },
               required: ['language', 'max_tokens', 'query'],
@@ -89,37 +89,37 @@ class WalkInKyotoMcpServer {
           },
           {
             name: 'search_route_by_name',
-            description: '駅名・バス停名指定でルート検索を行います。各区間の詳細な発着時刻、日付跨ぎ対応。',
+            description: 'Performs route search by specifying station and bus stop names. Supports detailed departure/arrival times for each segment and date crossing.',
             inputSchema: {
               type: 'object',
               properties: {
                 language: {
                   type: 'string',
                   enum: ['ja', 'en'],
-                  description: '応答言語',
+                  description: 'Response language',
                 },
                 max_tokens: {
                   type: 'integer',
                   minimum: 1,
-                  description: 'レスポンスの最大トークン数',
+                  description: 'Maximum number of tokens in response',
                 },
                 from_station: {
                   type: 'string',
-                  description: '出発駅・バス停名',
+                  description: 'Departure station/bus stop name',
                 },
                 to_station: {
                   type: 'string',
-                  description: '到着駅・バス停名',
+                  description: 'Arrival station/bus stop name',
                 },
                 datetime_type: {
                   type: 'string',
                   enum: ['departure', 'arrival', 'first', 'last'],
-                  description: '時刻指定タイプ',
+                  description: 'Time specification type. departure: Search routes by specifying departure time, arrival: Search routes by specifying arrival time, first: Search first train routes, last: Search last train routes.',
                 },
                 datetime: {
                   type: 'string',
                   pattern: '^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}',
-                  description: 'ISO-8601形式の日時 (例: 2025-07-07T00:43)',
+                  description: 'Date and time in ISO-8601 format (example: 2025-07-07T00:43)',
                 },
               },
               required: ['language', 'max_tokens', 'from_station', 'to_station', 'datetime_type', 'datetime'],
@@ -127,39 +127,39 @@ class WalkInKyotoMcpServer {
           },
           {
             name: 'search_route_by_geo',
-            description: '緯度経度指定でルート検索を行います。各区間の詳細な発着時刻、日付跨ぎ対応。',
+            description: 'Performs route search by specifying latitude and longitude coordinates. Supports detailed departure/arrival times for each segment and date crossing.',
             inputSchema: {
               type: 'object',
               properties: {
                 language: {
                   type: 'string',
                   enum: ['ja', 'en'],
-                  description: '応答言語',
+                  description: 'Response language',
                 },
                 max_tokens: {
                   type: 'integer',
                   minimum: 1,
-                  description: 'レスポンスの最大トークン数',
+                  description: 'Maximum number of tokens in response',
                 },
                 from_latlng: {
                   type: 'string',
                   pattern: '^\\d+\\.\\d+,\\d+\\.\\d+$',
-                  description: '出発地の緯度経度 (例: 35.02527,135.79189)',
+                  description: 'Latitude and longitude of departure location (example: 35.02527,135.79189)',
                 },
                 to_latlng: {
                   type: 'string',
                   pattern: '^\\d+\\.\\d+,\\d+\\.\\d+$',
-                  description: '到着地の緯度経度',
+                  description: 'Latitude and longitude of arrival location',
                 },
                 datetime_type: {
                   type: 'string',
                   enum: ['departure', 'arrival', 'first', 'last'],
-                  description: '時刻指定タイプ',
+                  description: 'Time specification type. departure: Search routes by specifying departure time, arrival: Search routes by specifying arrival time, first: Search first train routes, last: Search last train routes.',
                 },
                 datetime: {
                   type: 'string',
                   pattern: '^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}',
-                  description: 'ISO-8601形式の日時',
+                  description: 'Date and time in ISO-8601 format',
                 },
               },
               required: ['language', 'max_tokens', 'from_latlng', 'to_latlng', 'datetime_type', 'datetime'],
@@ -169,7 +169,7 @@ class WalkInKyotoMcpServer {
       };
     });
 
-    // ツール実行
+    // Tool execution
     this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const { name, arguments: args } = request.params;
 
@@ -195,7 +195,7 @@ class WalkInKyotoMcpServer {
           throw error;
         }
 
-        // その他のエラーをMcpErrorに変換
+        // Convert other errors to McpError
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         throw new McpError(
           ErrorCode.InternalError,
@@ -206,7 +206,7 @@ class WalkInKyotoMcpServer {
   }
 
   /**
-   * Tool 1: search_stop_by_substring の実行
+   * Tool 1: Execute search_stop_by_substring
    */
   private async handleStopSearch(args: StopSearchRequest) {
     const result: StopSearchResponse = await this.stopSearchService.search(args);
@@ -222,7 +222,7 @@ class WalkInKyotoMcpServer {
   }
 
   /**
-   * Tool 2: search_route_by_name の実行
+   * Tool 2: Execute search_route_by_name
    */
   private async handleRouteSearchByName(args: RouteSearchByNameRequest) {
     const result: RouteSearchResponse = await this.routeSearchByNameService.searchRoute(args);
@@ -238,10 +238,9 @@ class WalkInKyotoMcpServer {
   }
 
   /**
-   * Tool 3: search_route_by_geo の実行
+   * Tool 3: Execute search_route_by_geo
    */
   private async handleRouteSearchByGeo(args: RouteSearchByGeoRequest) {
-    // 緯度経度検索のパラメータをログ出力
     const result: RouteSearchResponse = await this.routeSearchByGeoService.searchRoute(args);
     return {
       content: [
@@ -254,7 +253,7 @@ class WalkInKyotoMcpServer {
   }
 
   /**
-   * サーバー開始
+   * Start server
    */
   async run(): Promise<void> {
     const transport = new StdioServerTransport();
@@ -262,7 +261,7 @@ class WalkInKyotoMcpServer {
   }
 
   /**
-   * クリーンアップ
+   * Cleanup
    */
   async dispose(): Promise<void> {
     this.routeSearchByNameService.dispose();
@@ -270,11 +269,11 @@ class WalkInKyotoMcpServer {
   }
 }
 
-// メイン実行
+// Main execution
 async function main(): Promise<void> {
   const server = new WalkInKyotoMcpServer();
   
-  // シグナルハンドリング
+  // Signal handling
   process.on('SIGINT', async () => {
     await server.dispose();
     process.exit(0);
@@ -293,7 +292,7 @@ async function main(): Promise<void> {
   }
 }
 
-// メイン実行
+// Main execution
 main().catch((error) => {
   process.exit(1);
 }); 

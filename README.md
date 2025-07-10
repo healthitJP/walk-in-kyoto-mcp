@@ -154,23 +154,28 @@ Search for routes by specifying latitude and longitude. Provides detailed depart
   "routes": [
     {
       "summary": {
-        "depart": "2025-07-07T09:00",      // Departure time
-        "arrive": "2025-07-07T09:32",      // Arrival time  
+        "depart": "2025-07-07T09:00",      // Departure time (ISO-8601 format)
+        "arrive": "2025-07-07T09:32",      // Arrival time (ISO-8601 format)  
         "duration_min": 32,                // Duration (minutes)
         "transfers": 1,                    // Number of transfers
         "fare_jpy": 230                    // Fare (Japanese yen)
       },
       "legs": [                            // Route segments
         {
-          "mode": "bus",                   // Transportation mode
-          "line": "City Bus Route 100",    // Route name
-          "from": "Kyoto Station",         // Departure point
-          "to": "Kiyomizu-michi",          // Destination point
-          "depart_time": "2025-07-07T09:00", // Segment departure time
-          "arrive_time": "2025-07-07T09:15", // Segment arrival time
-          "duration_min": 15,              // Duration
-          "stops": 8,                      // Number of stops
-          "fare_jpy": 230                  // Segment fare
+          "mode": "bus",                   // Transportation mode (bus/train/walk)
+          "line": "City Bus Route 100",    // Route name (optional)
+          "from": "Kyoto Station",         // Departure point (optional)
+          "to": "Kiyomizu-michi",          // Destination point (optional)
+          "from_lat": 34.985849,           // Departure latitude (optional)
+          "from_lng": 135.758767,          // Departure longitude (optional)
+          "to_lat": 34.996249,             // Destination latitude (optional)
+          "to_lng": 135.785049,            // Destination longitude (optional)
+          "depart_time": "2025-07-07T09:00", // Segment departure time (ISO-8601 format, optional)
+          "arrive_time": "2025-07-07T09:15", // Segment arrival time (ISO-8601 format, optional)
+          "duration_min": 15,              // Duration (minutes, required)
+          "stops": 8,                      // Number of stops (optional)
+          "fare_jpy": 230,                 // Segment fare (Japanese yen, optional)
+          "distance_km": 2.5               // Distance (kilometers, optional)
         }
       ]
     }
