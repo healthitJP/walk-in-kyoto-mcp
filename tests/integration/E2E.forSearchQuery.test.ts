@@ -6,6 +6,8 @@ import { RequestValidator } from '../../src/utils/RequestValidator.js';
 
 import util from 'util';
 
+// ネットワーク呼び出しが入るため、このテストファイルだけタイムアウトを延長
+jest.setTimeout(30000); // 30秒
 
 
 describe('RouteHtmlFetcher', () => {
