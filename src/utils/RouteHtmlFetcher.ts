@@ -78,8 +78,8 @@ export class RouteHtmlFetcher {
     await this.initMasterData(language);
 
     // 近隣駅リストと緯度経度を生成
-    const { fromStations, fromCoords, fromType } = await this.generateNearbyStations(fromStation, language);
-    const { fromStations: toStations, fromCoords: toCoords, fromType: toType } = await this.generateNearbyStations(toStation, language);
+    const { NearbyStations: fromStations, Coords: fromCoords, Type: fromType } = await this.generateNearbyStations(fromStation, language);
+    const { NearbyStations: toStations, Coords: toCoords, Type: toType } = await this.generateNearbyStations(toStation, language);
 
     // 始発・終電の場合の時刻処理
     const { finalDateTime, timeType } = this.processFirstLastTime(datetime, datetimeType);
@@ -159,11 +159,12 @@ export class RouteHtmlFetcher {
   /**
    * 駅名から近隣駅リストと緯度経度を生成
    * 元サイトのget_near_stations_all関数のロジックに基づく実装
+   * 一時的に公開
    */
   private async generateNearbyStations(stationName: string, language: 'ja' | 'en'): Promise<{
-    fromStations: string;
-    fromCoords: string;
-    fromType: string;
+    NearbyStations: string;
+    Coords: string;
+    Type: string;
   }> {
     if (!this.master || !this.landmarkData) {
       throw new Error('Master data not initialized');
@@ -173,9 +174,9 @@ export class RouteHtmlFetcher {
     const arashiyamaName = language === 'en' ? 'Arashiyama' : '嵐山';
     if (stationName === arashiyamaName) {
       return {
-        fromStations: this.ARASHIYAMA_NEAR_STATIONS,
-        fromCoords: '', // 特別ケースでは空
-        fromType: 'S'
+        NearbyStations: this.ARASHIYAMA_NEAR_STATIONS,
+        Coords: '', // 特別ケースでは空
+        Type: 'S'
       };
     }
 
@@ -183,9 +184,9 @@ export class RouteHtmlFetcher {
     const kiyomizuderaLandmark = this.landmarkData.data[this.KIYOMIZUDERA_LANDMARK_CODE];
     if (kiyomizuderaLandmark && stationName === kiyomizuderaLandmark.name) {
       return {
-        fromStations: this.KIYOMIZUDERA_NEAR_STATIONS,
-        fromCoords: `${kiyomizuderaLandmark.lat},${kiyomizuderaLandmark.lng}`,
-        fromType: 'S'
+        NearbyStations: this.KIYOMIZUDERA_NEAR_STATIONS,
+        Coords: `${kiyomizuderaLandmark.lat},${kiyomizuderaLandmark.lng}`,
+        Type: 'S'
       };
     }
 
@@ -193,9 +194,9 @@ export class RouteHtmlFetcher {
     const ginkakujiLandmark = this.landmarkData.data[this.GINKAKUJI_LANDMARK_CODE];
     if (ginkakujiLandmark && stationName === ginkakujiLandmark.name) {
       return {
-        fromStations: this.GINKAKUJI_NEAR_STATIONS,
-        fromCoords: `${ginkakujiLandmark.lat},${ginkakujiLandmark.lng}`,
-        fromType: 'S'
+        NearbyStations: this.GINKAKUJI_NEAR_STATIONS,
+        Coords: `${ginkakujiLandmark.lat},${ginkakujiLandmark.lng}`,
+        Type: 'S'
       };
     }
 
@@ -210,9 +211,9 @@ export class RouteHtmlFetcher {
       const nearStations = this.searchNearStations([directStation.lng, directStation.lat], stationName, directStation.ekidiv);
       
       return {
-        fromStations: nearStations,
-        fromCoords: `${directStation.lat},${directStation.lng}`,
-        fromType: directStation.ekidiv
+        NearbyStations: nearStations,
+        Coords: `${directStation.lat},${directStation.lng}`,
+        Type: directStation.ekidiv
       };
     }
 
@@ -272,9 +273,9 @@ export class RouteHtmlFetcher {
         const nearStations = this.searchNearStations([lng, lat], baseStationName, stationType);
         
         return {
-          fromStations: nearStations,
-          fromCoords: `${lat},${lng}`,
-          fromType: stationType
+          NearbyStations: nearStations,
+          Coords: `${lat},${lng}`,
+          Type: stationType
         };
       }
     }
@@ -286,9 +287,9 @@ export class RouteHtmlFetcher {
         const nearStations = this.searchNearStations([landmark.lng, landmark.lat], '', 'S');
         
         return {
-          fromStations: nearStations,
-          fromCoords: `${landmark.lat},${landmark.lng}`,
-          fromType: 'S'
+          NearbyStations: nearStations,
+          Coords: `${landmark.lat},${landmark.lng}`,
+          Type: 'S'
         };
       }
     }
@@ -296,9 +297,9 @@ export class RouteHtmlFetcher {
     // デフォルトパターン（見つからない場合）
     console.warn(`Station not found in master data: ${stationName}, using default pattern`);
     return {
-      fromStations: `${stationName},0`, // 最低限の形式
-      fromCoords: '35.0,135.7', // デフォルト京都市内座標
-      fromType: 'B' // デフォルトはBus
+      NearbyStations: `${stationName},0`, // 最低限の形式
+      Coords: '35.0,135.7', // デフォルト京都市内座標
+      Type: 'B' // デフォルトはBus
     };
   }
 
@@ -375,7 +376,7 @@ export class RouteHtmlFetcher {
         };
       }
     }
-
+    // ここまでで全駅走査
     // 鉄道駅が含まれていない場合は追加
     const hasRailStation = ranking.some(r => r.ekidiv === 'R');
     if (!hasRailStation && rMin.name) {

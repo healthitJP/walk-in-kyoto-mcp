@@ -16,10 +16,30 @@ if (isJestEnvironment) {
   // Jest環境での fallback: 現在のworking directoryから相対パスで解決
   currentDir = path.resolve(process.cwd(), 'src/data');
 } else {
-  // 通常の実行環境
-  // TypeScript コンパイラーを回避するため eval を使用
-  const importMetaUrl = eval('import.meta.url');
-  currentDir = path.dirname(fileURLToPath(importMetaUrl));
+  // 通常実行環境 --------------------------------------------------
+  // まず import.meta.url が利用できる (ESM) か試み、失敗したら CJS 用フォールバック
+  let resolvedDir: string | null = null;
+  try {
+    // TypeScript のコンパイル時に構文エラーを防ぐため eval を使用
+    const importMetaUrl = eval('import.meta.url');
+    if (importMetaUrl) {
+      resolvedDir = path.dirname(fileURLToPath(importMetaUrl));
+    }
+  } catch {
+    // noop – eval が失敗するのは CJS 実行時
+  }
+
+  if (resolvedDir) {
+    currentDir = resolvedDir;
+  // @ts-ignore __dirname は CJS でのみ存在
+  } else if (typeof __dirname !== 'undefined') {
+    // CommonJS ビルド (dist/) で実行されている場合
+    // __dirname は dist/src/data を指す
+    currentDir = __dirname;
+  } else {
+    // 最後の手段: プロジェクト root からの相対パス
+    currentDir = path.resolve(process.cwd(), 'dist/src/data');
+  }
 }
 // パッケージ内の data ルート (dist/data または開発時は ./data)
 const DATA_ROOT = path.resolve(currentDir, '../../data');

@@ -33,6 +33,4 @@ module.exports = {
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
-  // console.log を非表示にする設定
-  silent: true
 };

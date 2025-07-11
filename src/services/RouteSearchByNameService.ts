@@ -2,8 +2,8 @@ import { RouteHtmlFetcher } from '../utils/RouteHtmlFetcher.js';
 import { RouteHtmlParser } from '../utils/RouteHtmlParser.js';
 import { TokenLimiter } from '../utils/TokenLimiter.js';
 import { RequestValidator } from '../utils/RequestValidator.js';
-import { 
-  RouteSearchByNameRequest, 
+import {
+  RouteSearchByNameRequest,
   RouteSearchResponse
 } from '../types/index.js';
 
@@ -39,27 +39,22 @@ export class RouteSearchByNameService {
       this.validator.validateRouteSearchRequest(request);
 
       // HTML取得
-              const html = await this.fetcher.fetchByName(
-          request.from_station,
-          request.to_station,
-          request.datetime,
-          request.datetime_type,
-          request.language
-        );
+      const html = await this.fetcher.fetchByName(
+        request.from_station,
+        request.to_station,
+        request.datetime,
+        request.datetime_type,
+        request.language
+      );
 
       // HTML解析
       const parseResult = this.parser.parseHtml(html, request.language);
-      
-
-      if (parseResult.routes.length > 0) {
-
-      }
 
       // 駅が見つからない場合のエラーハンドリング
       if (parseResult.routes.length === 0) {
 
         throw this.createStopNotFoundError(request.from_station, request.to_station);
-      
+
       }
 
       // トークン制限適用
@@ -108,7 +103,7 @@ export class RouteSearchByNameService {
     ];
 
     const lowerHtml = html.toLowerCase();
-    return notFoundIndicators.some(indicator => 
+    return notFoundIndicators.some(indicator =>
       lowerHtml.includes(indicator.toLowerCase())
     );
   }
@@ -117,14 +112,14 @@ export class RouteSearchByNameService {
    * 既知のエラータイプかどうかを判定
    */
   private isKnownError(error: Error): boolean {
-    return error.message.includes('400') || 
-           error.message.includes('404') || 
-           error.message.includes('503') ||
-           error.message.includes('Stop not found') ||
-           error.message.includes('Invalid') ||
-           error.message.includes('Missing required parameter') ||
-           (error as any).code === 404 ||
-           (error as any).code === 503;
+    return error.message.includes('400') ||
+      error.message.includes('404') ||
+      error.message.includes('503') ||
+      error.message.includes('Stop not found') ||
+      error.message.includes('Invalid') ||
+      error.message.includes('Missing required parameter') ||
+      (error as any).code === 404 ||
+      (error as any).code === 503;
   }
 
   /**
@@ -133,11 +128,11 @@ export class RouteSearchByNameService {
   private isTimeoutError(error: Error): boolean {
     const errorCode = (error as any).code;
     const errorMessage = error.message.toLowerCase();
-    
-    return errorMessage.includes('timeout') || 
-           errorMessage.includes('econnaborted') ||
-           errorCode === 'ECONNABORTED' ||
-           errorCode === 'ETIMEDOUT';
+
+    return errorMessage.includes('timeout') ||
+      errorMessage.includes('econnaborted') ||
+      errorCode === 'ECONNABORTED' ||
+      errorCode === 'ETIMEDOUT';
   }
 
   /**
@@ -146,12 +141,12 @@ export class RouteSearchByNameService {
   private isNetworkError(error: Error): boolean {
     const errorCode = (error as any).code;
     const errorMessage = error.message.toLowerCase();
-    
-    return errorCode === 'ENOTFOUND' || 
-           errorCode === 'ECONNREFUSED' ||
-           errorCode === 'ENETUNREACH' ||
-           errorMessage.includes('enotfound') ||
-           errorMessage.includes('network error');
+
+    return errorCode === 'ENOTFOUND' ||
+      errorCode === 'ECONNREFUSED' ||
+      errorCode === 'ENETUNREACH' ||
+      errorMessage.includes('enotfound') ||
+      errorMessage.includes('network error');
   }
 
   /**

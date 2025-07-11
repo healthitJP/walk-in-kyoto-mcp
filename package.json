@@ -7,7 +7,7 @@
     "walk-in-kyoto-mcp": "dist/src/index.js"
   },
   "scripts": {
-    "test": "jest --silent",
+    "test": "jest",
     "test:u": "jest tests/unit --silent",
     "test:i": "jest tests/integration --silent",
     "build": "tsc && npm run copy-data && npm run compress-data",
