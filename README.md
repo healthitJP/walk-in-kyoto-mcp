@@ -4,6 +4,7 @@
 
 [![npm version](https://badge.fury.io/js/walk-in-kyoto-mcp.svg)](https://www.npmjs.com/package/walk-in-kyoto-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![MCP Badge](https://lobehub.com/badge/mcp/healthitjp-walk-in-kyoto-mcp)](https://lobehub.com/mcp/healthitjp-walk-in-kyoto-mcp)
 
 **Walk-in-Kyoto MCP** is a Model Context Protocol (MCP) server that provides public transportation route search functionality for Kyoto, Japan (buses and trains). It enables AI assistants to utilize Kyoto transportation information to suggest optimal travel routes.
 

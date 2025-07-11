@@ -4,6 +4,7 @@
 
 [![npm version](https://badge.fury.io/js/walk-in-kyoto-mcp.svg)](https://www.npmjs.com/package/walk-in-kyoto-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![MCP Badge](https://lobehub.com/badge/mcp/healthitjp-walk-in-kyoto-mcp)](https://lobehub.com/mcp/healthitjp-walk-in-kyoto-mcp)
 
 **Walk-in-Kyoto MCP** は、京都の公共交通機関（バス・電車）のルート検索を提供するModel Context Protocol (MCP) サーバーです。AI アシスタントが京都の交通情報を活用して、最適な移動ルートを提案できるようになります。
 
